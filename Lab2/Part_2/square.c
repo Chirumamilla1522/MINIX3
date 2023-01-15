@@ -1,43 +1,20 @@
-
-#include <sys/wait.h>  //for waitpid()
-#include <unistd.h>    //for chdir(), fork(), exec(), pid_t
-#include <stdlib.h>    //for malloc(), realloc(), free(), exit(), execvp(), EXIT_FAILURE, EXIT_SUCESSS
-#include <stdio.h>     //for stderr, getchar(), perror(), printf(), scanf()
-#include <string.h>    //for strcmp(), strtok()
-#include <sys/types.h> //for pid, exec() stuff
-
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-    char **cmd = malloc(1024 * sizeof(char *));
-    int i;
-
-    for (int i = 1; i < argc; i++)
-        cmd[i - 1] = argv[i];
-    cmd[i - 1] = NULL;
-
-    int a = atoi(cmd[argc - 2]);
-
-    sprintf(cmd[argc - 2], "%d", a * a);
-
-    if (cmd[1] == NULL)
-    {
-        printf("%s\n", cmd[argc - 2]);
-        exit(0);
-    }
-
-    char str[80];
-    strcpy(str, "./");
-    strcat(str, cmd[0]);
-    cmd[0] = str;
-
-    printf("PID of %s: %d\n", cmd[0], getpid());
-    if (execvp(cmd[0], cmd) < 0)
-    {
-        printf("cmd failed\n");
-        exit(0);
-    }
-
-    return 0;
+    if (argc == 1)
+        return 0;
+    char *result = argv[argc - 1];
+    int num = atoi(argv[argc - 1]);
+    sprintf(result, "%d", (num * num));
+    printf("Square: Current process id: %d, Current result: %s\n", getpid(), result);
+    char *arg[argc];
+    for (int i = 0; i < (argc - 2); i++)
+        arg[i] = argv[i + 1];
+    arg[argc - 2] = result;
+    arg[argc - 1] = NULL;
+    execvp(arg[0], arg);
 }
