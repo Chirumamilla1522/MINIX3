@@ -3,6 +3,15 @@
 #include <string.h>
 #include <unistd.h>
 
+char* itoa(int val, int base){
+    
+    static char buf[32] = {0};    
+    int i = 30;    
+    for(; val && i ; --i, val /= base)    
+        buf[i] = "0123456789abcdef"[val % base];   
+    return &buf[i+1];
+    
+}
 int main(int argc, char *argv[])
 {
     if (argc == 1)
