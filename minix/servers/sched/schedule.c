@@ -303,6 +303,9 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 	int new_prio, new_quantum, new_cpu;
 
 	pick_cpu(rmp);
+	if (rmp->priority >= USER_Q){
+		printf("PID %d swapped in\n", _ENDPOINT_P(rmp->endpoint));
+	}
 
 	if (flags & SCHEDULE_CHANGE_PRIO)
 		new_prio = rmp->priority;
