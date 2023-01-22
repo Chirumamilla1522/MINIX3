@@ -303,6 +303,9 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 	int new_prio, new_quantum, new_cpu;
 
 	pick_cpu(rmp);
+	if (rmp->priority >= USER_Q){
+		printf("PID %d swapped in (200010010, 200010017)\n", _ENDPOINT_P(rmp->endpoint));
+	}
 	
 	if (flags & SCHEDULE_CHANGE_PRIO)
 		new_prio = rmp->priority;
@@ -324,9 +327,7 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 		printf("PM: An error occurred when trying to schedule %d: %d\n",
 		rmp->endpoint, err);
 	}
-	if (rmp->priority >= USER_Q){
-		printf("PID %d swapped in (200010010, 200010017)\n", _ENDPOINT_P(rmp->endpoint));
-	}
+	
 
 	return err;
 }
